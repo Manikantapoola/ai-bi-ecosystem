@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-BI Intelligent Ecosystem Dashboard</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            darkbg: '#060B13',
+            darkcard: 'rgba(15, 23, 42, 0.45)',
+            darkborder: 'rgba(255, 255, 255, 0.08)',
+            brand: {
+              violet: '#7C3AED',
+              cyan: '#06B6D4',
+              emerald: '#10B981',
+              rose: '#F43F5E',
+              amber: '#F59E0B'
+            }
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 15px rgba(6, 182, 212, 0.15)',
+            'glow-violet': '0 0 15px rgba(124, 58, 237, 0.25)',
+            'glow-emerald': '0 0 15px rgba(16, 185, 129, 0.15)',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="assets/styles.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-darkbg text-slate-100 font-sans h-full overflow-hidden flex flex-col antialiased selection:bg-brand-violet selection:text-white">
+  
+  <!-- Header Bar -->
+  <header class="h-16 border-b border-darkborder flex items-center justify-between px-6 bg-[#090F1B]/80 backdrop-blur-md z-40 shrink-0">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-violet to-brand-cyan flex items-center justify-center shadow-glow-violet animate-pulse-slow">
+        <i data-lucide="cpu" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <h1 class="font-display font-bold text-lg leading-none tracking-wide bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">AI-BI Intelligent Ecosystem</h1>
+        <span class="text-[10px] uppercase font-semibold text-brand-cyan tracking-widest leading-none">Autonomous Data Engine</span>
+      </div>
+    </div>
+    
+    <!-- System Status Badges -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden sm:flex items-center space-x-2 bg-emerald-950/30 border border-emerald-900/30 px-3 py-1 rounded-full text-xs">
+        <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span>
+        <span class="w-2 h-2 rounded-full bg-brand-emerald absolute"></span>
+        <span class="text-brand-emerald font-medium">Ecosystem Online</span>
+      </div>
+      <div class="flex items-center space-x-3 border-l border-darkborder pl-4">
+        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 shadow-inner">
+          <i data-lucide="user" class="w-4 h-4 text-slate-300"></i>
+        </div>
+        <div class="hidden md:block text-left">
+          <p class="text-xs font-semibold leading-none text-slate-200">Manikanta Poola</p>
+          <span class="text-[9px] text-slate-400 font-medium">Platform Architect</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body -->
+  <div class="flex flex-1 overflow-hidden">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 border-r border-darkborder bg-[#070D17]/85 backdrop-blur-md hidden md:flex flex-col p-4 justify-between shrink-0">
+      <div class="space-y-6">
+        <div>
+          <span class="px-3 text-[10px] uppercase font-bold text-slate-500 tracking-wider">Navigation</span>
+          <nav class="mt-2 space-y-1.5">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group active-tab">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 text-slate-400 group-hover:text-brand-violet transition-colors"></i>
+              <span>Dashboard Overview</span>
+            </button>
+            <button onclick="switchTab('pipelines')" id="btn-pipelines" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-800/40">
+              <i data-lucide="git-branch" class="w-4 h-4 text-slate-400 group-hover:text-brand-cyan transition-colors"></i>
+              <span>AI Agent Pipelines</span>
+              <span class="ml-auto text-[9px] bg-brand-cyan/20 border border-brand-cyan/30 text-brand-cyan px-2 py-0.5 rounded-full font-bold">4 Active</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="btn-analytics" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-800/40">
+              <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400 group-hover:text-brand-emerald transition-colors"></i>
+              <span>BI Data Analytics</span>
+            </button>
+            <button onclick="switchTab('settings')" id="btn-settings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group text-slate-400 hover:text-white hover:bg-slate-800/40">
+              <i data-lucide="settings" class="w-4 h-4 text-slate-400 group-hover:text-brand-amber transition-colors"></i>
+              <span>Ecosystem Settings</span>
+            </button>
+          </nav>
+        </div>
+        
+        <div>
+          <span class="px-3 text-[10px] uppercase font-bold text-slate-500 tracking-wider text-left block">Ecosystem Status</span>
+          <div class="mt-2 space-y-3 bg-[#0C1423]/60 border border-darkborder p-3.5 rounded-xl">
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-slate-400">Agent GPU Load</span>
+                <span id="load-gpu" class="font-semibold text-brand-violet">48%</span>
+              </div>
+              <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-gpu" class="h-full bg-gradient-to-r from-brand-violet to-purple-400 transition-all duration-500" style="width: 48%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between text-[11px]">
+                <span class="text-slate-400">Memory Latency</span>
+                <span id="load-mem" class="font-semibold text-brand-cyan">18ms</span>
+              </div>
+              <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="bar-mem" class="h-full bg-gradient-to-r from-brand-cyan to-blue-400 transition-all duration-500" style="width: 32%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer Info -->
+      <div class="bg-[#0C1423]/40 border border-darkborder/50 p-3 rounded-xl flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center shrink-0 border border-slate-700">
+          <i data-lucide="github" class="w-4 h-4 text-slate-400"></i>
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-[10px] text-slate-400 leading-none">GitHub Repository</p>
+          <a href="https://github.com/Manikantapoola/ai-bi-ecosystem" target="_blank" class="text-xs text-brand-cyan font-semibold truncate block hover:underline hover:text-cyan-300">Manikantapoola/ai-bi-ecosystem</a>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- View Container (Fills rest of screen) -->
+    <main class="flex-1 flex flex-col overflow-y-auto bg-[#070D17]/40">
+      
+      <!-- VIEW: DASHBOARD OVERVIEW -->
+      <section id="view-dashboard" class="p-6 space-y-6 flex-1 w-full max-w-7xl mx-auto">
+        <!-- Top Metrics Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          <!-- Metric Card 1 -->
+          <div class="glass-card shadow-glow-violet hover-glow flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">AI Success Rate</span>
+                <h3 class="text-3xl font-display font-bold mt-1 text-slate-100 tracking-tight" id="metric-success">99.4%</h3>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-brand-violet/10 border border-brand-violet/20 flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-4 h-4 text-brand-violet animate-pulse-slow"></i>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 mt-4 text-[11px] text-brand-emerald">
+              <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+              <span>+0.2% vs yesterday</span>
+            </div>
+          </div>
+          
+          <!-- Metric Card 2 -->
+          <div class="glass-card shadow-glow-cyan hover-glow flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Avg Response Latency</span>
+                <h3 class="text-3xl font-display font-bold mt-1 text-slate-100 tracking-tight" id="metric-latency">242ms</h3>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center">
+                <i data-lucide="zap" class="w-4 h-4 text-brand-cyan"></i>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 mt-4 text-[11px] text-brand-emerald">
+              <i data-lucide="trending-down" class="w-3.5 h-3.5 text-brand-emerald"></i>
+              <span>-12ms speed reduction</span>
+            </div>
+          </div>
+          
+          <!-- Metric Card 3 -->
+          <div class="glass-card shadow-glow-emerald hover-glow flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Active Agents</span>
+                <h3 class="text-3xl font-display font-bold mt-1 text-slate-100 tracking-tight" id="metric-agents">4 / 4</h3>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-brand-emerald/10 border border-brand-emerald/20 flex items-center justify-center">
+                <i data-lucide="users" class="w-4 h-4 text-brand-emerald"></i>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 mt-4 text-[11px] text-slate-400">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-spin"></i>
+              <span>All nodes synced</span>
+            </div>
+          </div>
+          
+          <!-- Metric Card 4 -->
+          <div class="glass-card hover-glow flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Ecosystem Queries</span>
+                <h3 class="text-3xl font-display font-bold mt-1 text-slate-100 tracking-tight animate-count" id="metric-queries">14,242</h3>
+              </div>
+              <div class="w-8 h-8 rounded-lg bg-brand-rose/10 border border-brand-rose/20 flex items-center justify-center">
+                <i data-lucide="database" class="w-4 h-4 text-brand-rose"></i>
+              </div>
+            </div>
+            <div class="flex items-center space-x-1.5 mt-4 text-[11px] text-brand-emerald">
+              <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
+              <span>+18.4% monthly volume</span>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- Main Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- BI Analytics Chart -->
+          <div class="glass-card lg:col-span-2 flex flex-col justify-between">
+            <div class="flex items-center justify-between border-b border-darkborder pb-4 mb-4">
+              <div>
+                <h2 class="font-display font-bold text-base text-slate-100 flex items-center space-x-2">
+                  <i data-lucide="line-chart" class="w-4 h-4 text-brand-violet"></i>
+                  <span>Real-Time BI Analytics Processing</span>
+                </h2>
+                <p class="text-xs text-slate-400 mt-0.5">Continuous analysis volume and model processing capacity</p>
+              </div>
+              <span class="text-[10px] bg-brand-violet/20 border border-brand-violet/30 text-brand-violet px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Live Engine</span>
+            </div>
+            <div class="h-64 md:h-80 w-full relative">
+              <canvas id="chart-dashboard"></canvas>
+            </div>
+          </div>
+
+          <!-- Active AI Pipelines Summary -->
+          <div class="glass-card flex flex-col">
+            <h2 class="font-display font-bold text-base text-slate-100 flex items-center space-x-2 border-b border-darkborder pb-4 mb-4">
+              <i data-lucide="git-merge" class="w-4 h-4 text-brand-cyan"></i>
+              <span>AI Agent Subsystems</span>
+            </h2>
+            <div class="flex-1 space-y-4">
+              
+              <!-- Agent Row 1 -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/30 border border-darkborder/50">
+                <div class="flex items-center space-x-3">
+                  <div class="w-7 h-7 rounded-lg bg-brand-violet/20 border border-brand-violet/30 flex items-center justify-center">
+                    <i data-lucide="file-search" class="w-4 h-4 text-brand-violet"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-semibold text-slate-200">Data Extraction Agent</h4>
+                    <span class="text-[9px] text-slate-400">Scraping & structuring BI schemas</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] bg-emerald-950/30 border border-emerald-900/50 text-brand-emerald px-2 py-0.5 rounded-full font-bold">Online</span>
+                </div>
+              </div>
+              
+              <!-- Agent Row 2 -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/30 border border-darkborder/50">
+                <div class="flex items-center space-x-3">
+                  <div class="w-7 h-7 rounded-lg bg-brand-cyan/20 border border-brand-cyan/30 flex items-center justify-center">
+                    <i data-lucide="smile" class="w-4 h-4 text-brand-cyan"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-semibold text-slate-200">Sentiment Engine Agent</h4>
+                    <span class="text-[9px] text-slate-400">Classifying linguistic indicators</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] bg-emerald-950/30 border border-emerald-900/50 text-brand-emerald px-2 py-0.5 rounded-full font-bold">Online</span>
+                </div>
+              </div>
+              
+              <!-- Agent Row 3 -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/30 border border-darkborder/50">
+                <div class="flex items-center space-x-3">
+                  <div class="w-7 h-7 rounded-lg bg-brand-emerald/20 border border-brand-emerald/30 flex items-center justify-center">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-brand-emerald"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-semibold text-slate-200">Forecasting Agent</h4>
+                    <span class="text-[9px] text-slate-400">Time-series neural trend forecasting</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] bg-emerald-950/30 border border-emerald-900/50 text-brand-emerald px-2 py-0.5 rounded-full font-bold">Online</span>
+                </div>
+              </div>
+
+              <!-- Agent Row 4 -->
+              <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/30 border border-darkborder/50">
+                <div class="flex items-center space-x-3">
+                  <div class="w-7 h-7 rounded-lg bg-brand-rose/20 border border-brand-rose/30 flex items-center justify-center">
+                    <i data-lucide="monitor" class="w-4 h-4 text-brand-rose"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-semibold text-slate-200">BI Visualizer Agent</h4>
+                    <span class="text-[9px] text-slate-400">Formulating elegant visual insight graphs</span>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] bg-emerald-950/30 border border-emerald-900/50 text-brand-emerald px-2 py-0.5 rounded-full font-bold">Online</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: AI AGENT PIPELINES -->
+      <section id="view-pipelines" class="p-6 space-y-6 hidden flex-1 w-full max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-darkborder pb-4 mb-4">
+          <div>
+            <h2 class="font-display font-bold text-xl text-slate-100 flex items-center space-x-3">
+              <i data-lucide="git-branch" class="w-5 h-5 text-brand-cyan"></i>
+              <span>Active Agent Pipeline Stream</span>
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Visualize real-time data flowing through our four autonomous AI subagents</p>
+          </div>
+          <button onclick="triggerPipelineDemo()" class="mt-4 md:mt-0 flex items-center space-x-2 bg-gradient-to-r from-brand-violet to-purple-600 hover:from-brand-violet hover:to-purple-500 px-4 py-2 rounded-xl text-xs font-semibold shadow-glow-violet transition-all">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            <span>Inject Test Query</span>
+          </button>
+        </div>
+
+        <!-- Horizontal Pipeline Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 relative">
+          
+          <!-- Step 1 Card -->
+          <div class="glass-card border-brand-violet/30 bg-slate-900/20 relative" id="pipe-step-1">
+            <div class="absolute -top-3 left-4 text-[9px] font-bold bg-brand-violet text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Step 01</div>
+            <div class="flex items-center space-x-3.5 border-b border-darkborder pb-3 mb-3">
+              <div class="w-8 h-8 rounded-xl bg-brand-violet/20 border border-brand-violet/30 flex items-center justify-center">
+                <i data-lucide="file-search" class="w-4.5 h-4.5 text-brand-violet"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-200">Data Extraction</h3>
+                <span class="text-[10px] text-slate-400">Autonomous Web Scraper</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-300 min-h-[44px]">Retrieves raw market intelligence inputs and parses them into standardized structured JSON schemas.</p>
+            <div class="mt-4 pt-3 border-t border-darkborder/50 flex items-center justify-between text-[10px]">
+              <span class="text-slate-500">Avg Cost/Task</span>
+              <span class="font-bold text-brand-violet">$0.004</span>
+            </div>
+          </div>
+
+          <!-- Step 2 Card -->
+          <div class="glass-card relative" id="pipe-step-2">
+            <div class="absolute -top-3 left-4 text-[9px] font-bold bg-brand-cyan text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Step 02</div>
+            <div class="flex items-center space-x-3.5 border-b border-darkborder pb-3 mb-3">
+              <div class="w-8 h-8 rounded-xl bg-brand-cyan/20 border border-brand-cyan/30 flex items-center justify-center">
+                <i data-lucide="smile" class="w-4.5 h-4.5 text-brand-cyan"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-200">Sentiment Classifier</h3>
+                <span class="text-[10px] text-slate-400">Cognitive Language Parser</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-300 min-h-[44px]">Evaluates tone metrics, market sentiment scales, and risk factors of the extracted business datasets.</p>
+            <div class="mt-4 pt-3 border-t border-darkborder/50 flex items-center justify-between text-[10px]">
+              <span class="text-slate-500">Confidence Accuracy</span>
+              <span class="font-bold text-brand-cyan">98.8%</span>
+            </div>
+          </div>
+
+          <!-- Step 3 Card -->
+          <div class="glass-card relative" id="pipe-step-3">
+            <div class="absolute -top-3 left-4 text-[9px] font-bold bg-brand-emerald text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Step 03</div>
+            <div class="flex items-center space-x-3.5 border-b border-darkborder pb-3 mb-3">
+              <div class="w-8 h-8 rounded-xl bg-brand-emerald/20 border border-brand-emerald/30 flex items-center justify-center">
+                <i data-lucide="trending-up" class="w-4.5 h-4.5 text-brand-emerald"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-200">Time-Series Forecast</h3>
+                <span class="text-[10px] text-slate-400">Neural Trend Engine</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-300 min-h-[44px]">Generates predictive values and time-series extrapolation charts by referencing pre-trained forecasting models.</p>
+            <div class="mt-4 pt-3 border-t border-darkborder/50 flex items-center justify-between text-[10px]">
+              <span class="text-slate-500">Extrapolated Horizon</span>
+              <span class="font-bold text-brand-emerald">90 Days</span>
+            </div>
+          </div>
+
+          <!-- Step 4 Card -->
+          <div class="glass-card relative" id="pipe-step-4">
+            <div class="absolute -top-3 left-4 text-[9px] font-bold bg-brand-rose text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Step 04</div>
+            <div class="flex items-center space-x-3.5 border-b border-darkborder pb-3 mb-3">
+              <div class="w-8 h-8 rounded-xl bg-brand-rose/20 border border-brand-rose/30 flex items-center justify-center">
+                <i data-lucide="monitor" class="w-4.5 h-4.5 text-brand-rose"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-slate-200">BI Insights Render</h3>
+                <span class="text-[10px] text-slate-400">Visual Insights Node</span>
+              </div>
+            </div>
+            <p class="text-[11px] text-slate-300 min-h-[44px]">Translates raw data forecasting arrays into beautiful visual analytics grids ready for stakeholder reporting.</p>
+            <div class="mt-4 pt-3 border-t border-darkborder/50 flex items-center justify-between text-[10px]">
+              <span class="text-slate-500">Output Standard</span>
+              <span class="font-bold text-brand-rose">High-Res HTML5</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Real-Time Activity Logger -->
+        <div class="glass-card flex flex-col flex-1">
+          <div class="flex justify-between items-center border-b border-darkborder pb-3 mb-3">
+            <h3 class="font-display font-bold text-sm text-slate-100 flex items-center space-x-2">
+              <i data-lucide="terminal" class="w-4 h-4 text-brand-emerald animate-pulse-slow"></i>
+              <span>Autonomous Engine Console Logs</span>
+            </h3>
+            <button onclick="clearPipelineLogs()" class="text-[10px] text-slate-500 hover:text-slate-300 flex items-center space-x-1.5 transition-colors">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Clear Console</span>
+            </button>
+          </div>
+          <div class="bg-[#050911]/90 rounded-xl p-4 font-mono text-[11px] text-slate-300 h-64 overflow-y-auto border border-darkborder shadow-inner leading-relaxed" id="pipeline-logs-console">
+            <!-- Simulated logs will inject here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: BI DATA ANALYTICS -->
+      <section id="view-analytics" class="p-6 space-y-6 hidden flex-1 w-full max-w-7xl mx-auto">
+        <div class="border-b border-darkborder pb-4 mb-4">
+          <h2 class="font-display font-bold text-xl text-slate-100 flex items-center space-x-3">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 text-brand-emerald"></i>
+            <span>Deep BI Analytics Explorer</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Deep visual metrics analyzing performance variables of your autonomous system components</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Analytical breakdown -->
+          <div class="glass-card lg:col-span-2 flex flex-col justify-between">
+            <h3 class="font-display font-bold text-sm text-slate-100 mb-4 flex items-center space-x-2">
+              <i data-lucide="hourglass" class="w-4 h-4 text-brand-cyan"></i>
+              <span>Model Computational Latency Distributions</span>
+            </h3>
+            <div class="h-64 md:h-80 w-full relative">
+              <canvas id="chart-analytics-1"></canvas>
+            </div>
+          </div>
+
+          <!-- Pie breakdown -->
+          <div class="glass-card flex flex-col">
+            <h3 class="font-display font-bold text-sm text-slate-100 mb-4 flex items-center space-x-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-brand-emerald"></i>
+              <span>Cognitive Agent GPU Share Ratio</span>
+            </h3>
+            <div class="h-64 flex items-center justify-center relative">
+              <canvas id="chart-analytics-2"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: ECOSYSTEM SETTINGS -->
+      <section id="view-settings" class="p-6 space-y-6 hidden flex-1 w-full max-w-7xl mx-auto">
+        <div class="border-b border-darkborder pb-4 mb-4">
+          <h2 class="font-display font-bold text-xl text-slate-100 flex items-center space-x-3">
+            <i data-lucide="settings" class="w-5 h-5 text-brand-amber"></i>
+            <span>Ecosystem Settings & Controls</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Tune model parameters, control rendering standards, and reset parameters</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Settings Card 1 -->
+          <div class="glass-card space-y-4">
+            <h3 class="font-display font-bold text-sm text-slate-100 flex items-center space-x-2 pb-2 border-b border-darkborder/50">
+              <i data-lucide="sliders" class="w-4 h-4 text-brand-amber"></i>
+              <span>Neural Pipeline Constants</span>
+            </h3>
+            
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Temperature Factor</label>
+                <div class="flex items-center space-x-4">
+                  <input type="range" min="0" max="1" step="0.1" value="0.7" id="param-temp" oninput="updateSettingVal('temp', this.value)" class="flex-1 accent-brand-amber">
+                  <span id="val-temp" class="text-xs font-bold text-brand-amber w-8 text-right">0.7</span>
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Data Recency Buffer (Days)</label>
+                <div class="flex items-center space-x-4">
+                  <input type="range" min="1" max="365" step="1" value="90" id="param-buffer" oninput="updateSettingVal('buffer', this.value)" class="flex-1 accent-brand-amber">
+                  <span id="val-buffer" class="text-xs font-bold text-brand-amber w-8 text-right">90</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Model Node Depth</label>
+                <select class="w-full text-xs bg-[#0F172A] border border-darkborder rounded-lg p-2.5 text-slate-300 focus:outline-none focus:border-brand-amber">
+                  <option>Deep-Query LLM Engine v4 (Ultra)</option>
+                  <option>Medium Latency LLM Engine v2.5</option>
+                  <option>Local CPU-Optimized Pipeline Model</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Card 2 -->
+          <div class="glass-card flex flex-col justify-between">
+            <div class="space-y-4">
+              <h3 class="font-display font-bold text-sm text-slate-100 flex items-center space-x-2 pb-2 border-b border-darkborder/50">
+                <i data-lucide="radio" class="w-4 h-4 text-brand-amber"></i>
+                <span>Platform Simulator Overrides</span>
+              </h3>
+              <p class="text-xs text-slate-400">Manually trigger extreme loads, toggle live animations, or reset the analytics engines.</p>
+              
+              <div class="space-y-2">
+                <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/30 border border-darkborder/50">
+                  <div class="flex flex-col">
+                    <span class="text-xs font-semibold text-slate-200">Inject Simulated GPU Load</span>
+                    <span class="text-[9px] text-slate-500">Artificially pegs system memory rendering loops</span>
+                  </div>
+                  <button onclick="toggleExtremeGPULoad()" id="btn-gpu-extreme" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg font-bold transition-all text-slate-200">Trigger Load</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-darkborder/50 flex justify-end">
+              <button onclick="resetSettings()" class="bg-[#1E293B] border border-slate-700 hover:bg-[#334155] text-xs px-4 py-2 rounded-xl font-semibold text-slate-200 transition-all">
+                Reset All Settings
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+  
+  <!-- Footer Bar -->
+  <footer class="h-8 border-t border-darkborder bg-[#050911]/90 flex items-center justify-between px-6 text-[10px] text-slate-500 shrink-0 select-none z-40">
+    <p>&copy; 2026 AI-BI Ecosystem Dashboard. Designed for Manikanta Poola portfolio.</p>
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span>
+        <span>Secure SecureCoder-Verified Node</span>
+      </div>
+      <span>v1.0.4-LTS</span>
+    </div>
+  </footer>
+
+  <!-- Script Initializer -->
+  <script src="assets/app.js"></script>
+</body>
+</html>

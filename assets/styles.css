@@ -1,0 +1,131 @@
+/* Premium AI-BI Dashboard Custom Vanilla CSS */
+
+:root {
+  --color-violet-glow: rgba(124, 58, 237, 0.2);
+  --color-cyan-glow: rgba(6, 182, 212, 0.15);
+  --color-emerald-glow: rgba(16, 185, 129, 0.12);
+}
+
+/* Base Body Radial Gradient */
+body {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.04) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Glassmorphism Premium Cards */
+.glass-card {
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sleek Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(6, 11, 19, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Sidebar Active State Glow styling */
+.active-tab {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0.02) 100%);
+  border-left: 3px solid #7C3AED;
+  color: #FFFFFF !important;
+  box-shadow: inset 1px 0px 8px rgba(124, 58, 237, 0.1);
+}
+
+.active-tab i {
+  color: #7C3AED !important;
+}
+
+/* Hover Glowing Cards */
+.hover-glow:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+/* Custom Micro-Animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.9;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s infinite ease-in-out;
+}
+
+@keyframes glow-pulse-violet {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(124, 58, 237, 0.35);
+  }
+}
+
+.glow-active-violet {
+  animation: glow-pulse-violet 2.5s infinite ease-in-out;
+}
+
+/* Simulated log code highlighting */
+.log-timestamp {
+  color: #06B6D4;
+}
+
+.log-agent {
+  color: #A78BFA;
+  font-weight: 600;
+}
+
+.log-success {
+  color: #10B981;
+}
+
+.log-info {
+  color: #94A3B8;
+}
+
+.log-warning {
+  color: #F59E0B;
+}
+
+/* Page transitions style */
+section {
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
